@@ -1,0 +1,17 @@
+[project]
+name = "calibration-summary-utils"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "matplotlib>=3.10.3",
+    "numpy>=2.3.1",
+    "pandas>=2.3.1",
+    "pillar-project",
+    "seaborn>=0.13.2",
+    "tqdm>=4.67.1",
+]
+
+[tool.uv.sources]
+pillar-project = { git = "https://github.com/Dzeiberg/pillar_project.git" }
