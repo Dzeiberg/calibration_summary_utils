@@ -48,7 +48,9 @@ summarize_fits(fits,scoreset,summary_file_savepath=summary_filepath,
                 figure_savepath=fig_filepath,)
 ```
 
-## Example 
+Please find additional details on hyperparameters passed to `fit.run` in the [assay calibration repository](https://github.com/Dzeiberg/assay_calibration)
+
+## Example output
 ### Visualization of model fit
 <img src="test/fit_visualization.png" alt="Example calibration visualization" title="Example calibration visualization" width="25%">
 
