@@ -35,15 +35,15 @@ from assay_calibration.data_utils.dataset import BasicScoreset
 from assay_calibration.fit_utils.fit import Fit
 from calibration_summary_utils.summarize_fits import summarize_fits
 
-data_filepath = Path("example_table.csv")
+data_filepath = Path("test/example_table.csv")
 scoreset = BasicScoreset.from_csv(example_data)
 fits = []
 for fitNum in tqdm(range(10)):
     fit = Fit(scoreset)
     fit.run(core_limit=1, num_fits=1, component_range=[2, 3])
     fits.append(fit)
-summary_filepath = "summary.json"
-fig_filepath = "fit_visualization.png"
+summary_filepath = "test/summary.json"
+fig_filepath = "test/fit_visualization.png"
 summarize_fits(fits,scoreset,summary_file_savepath=summary_filepath,
                 figure_savepath=fig_filepath,)
 ```
