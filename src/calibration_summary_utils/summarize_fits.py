@@ -121,8 +121,6 @@ def summarize_pillar_fits(
         scoreset_result["final_threshold_quantile"] = final_threshold_quantile
         with open(scoreset_summary_file, "w") as f:
             json.dump(scoreset_result, f, indent=4)
-        # with open(scoreset_lrPlus_file, 'w') as f:
-        #     json.dump(scoreset_lrPlus_values, f, indent=4)
         print(f"Summary written to {scoreset_summary_file}")
     print(f"Final models saved to {final_models_filepath}")
     print(f"Summaries saved to {summaries_dir}")
