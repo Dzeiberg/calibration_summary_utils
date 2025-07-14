@@ -10,7 +10,7 @@ resolution-markers = [
 [[package]]
 name = "assay-calibration"
 version = "0.1.0"
-source = { git = "https://github.com/Dzeiberg/assay_calibration.git#6b0cbd60509458ca87a9553dddab76f48466c065" }
+source = { git = "https://github.com/Dzeiberg/assay_calibration.git#5793d05b6310a87d24766177d9f002ee96c030e7" }
 dependencies = [
     { name = "fire" },
     { name = "joblib" },

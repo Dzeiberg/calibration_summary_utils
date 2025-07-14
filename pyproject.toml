@@ -3,12 +3,10 @@ name = "calibration-summary-utils"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
+requires-python = ">=3.10"
 dependencies = [
-    "assay-calibration",
+    "assay-calibration @ git+https://github.com/Dzeiberg/assay_calibration.git",
     "numpy>=2.2.6",
     "pandas>=2.3.1",
     "seaborn>=0.13.2",
 ]
-
-[tool.uv.sources]
-assay-calibration = { git = "https://github.com/Dzeiberg/assay_calibration.git" }
