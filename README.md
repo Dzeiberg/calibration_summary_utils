@@ -75,6 +75,6 @@ summarize_fits(fits,scoreset,summary_file_savepath=summary_filepath,
 ```
 `final_pathogenic_thresholds` and `final_benign_thresholds` are lists containing the functional score defining the start of the range in which a variant is assigned (+1, +2, +3, +4, +8) and (-1, -2, -3, -4, -8) points in a modified (as +/- 3 is not included in the original guidelines) points-based ACMG variant classification framework. These thresholds are computed with respect to the prior probability of pathogenicity estimated by the model, denoted as `median_prior`. The `inverted` field contains the value `canonical` if lower scores are more functionally abnormal and contains the value `inverted` if lower scores are more functionally normal. This directionality is inferred by the median assay scores of the pathogenic (sample `0`) and benign (sample `1`) samples.
 
-## Reach Out or Submit an Issue
+## Issues
 
-If you encounter any issues or have questions about this repo, feel free to reach out or submit an issue on the [GitHub repository](https://github.com/Dzeiberg/calibration_summary_utils/issues). Contributions and feedback are always welcome!
+If you encounter any issues or have questions about this repo, feel free to submit an issue on the [GitHub repository](https://github.com/Dzeiberg/calibration_summary_utils/issues). Contributions and feedback are always welcome!
