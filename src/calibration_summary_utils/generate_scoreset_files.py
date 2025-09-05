@@ -1,6 +1,7 @@
-from assay_calibration.data_utils.dataset import Scoreset
+from scoreset import Scoreset
 from pathlib import Path
 import pandas as pd
+from tqdm import tqdm
 
 
 def generate_scoreset_files(
@@ -26,16 +27,22 @@ def generate_scoreset_files(
 
     pillar_df = pd.read_csv(pillar_df_filepath)
     scoreset_save_dir.mkdir(parents=True, exist_ok=True)
-    for scoreset_id, group in pillar_df.groupby("Dataset"):
-        scoreset = Scoreset(group)
-        scoreset_filepath = scoreset_save_dir / f"{scoreset_id}.json"
-        scoreset.to_json(scoreset_filepath)
-        print(f"Saved scoreset {scoreset_id} to {scoreset_filepath}")
-        with open(scoreset_summary_dir / f"{scoreset_id}_summary.json", "w") as f:
-            f.write(str(scoreset))
-        print(
-            f"Saved scoreset summary {scoreset_id} to {scoreset_summary_dir / f'{scoreset_id}_summary.json'}"
-        )
+    with tqdm(pillar_df.groupby("Dataset"), desc="Generating scoreset files") as pbar:
+        for scoreset_id, group in pbar:
+            pbar.set_postfix({"Scoreset": scoreset_id})
+            try:
+                scoreset = Scoreset(group)
+            except ValueError as e:
+                print(f"Skipping scoreset {scoreset_id} due to error: {e}")
+                continue
+            scoreset_filepath = scoreset_save_dir / f"{scoreset_id}.json"
+            scoreset.to_json(scoreset_filepath)
+            print(f"Saved scoreset {scoreset_id} to {scoreset_filepath}")
+            with open(scoreset_summary_dir / f"{scoreset_id}_summary.json", "w") as f:
+                f.write(str(scoreset))
+            print(
+                f"Saved scoreset summary {scoreset_id} to {scoreset_summary_dir / f'{scoreset_id}_summary.json'}"
+            )
 
 
 if __name__ == "__main__":
