@@ -11,3 +11,4 @@ wheels/
 # custom
 scratch/
 test/test_results/
+run.py

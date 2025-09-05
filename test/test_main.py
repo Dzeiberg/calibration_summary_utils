@@ -12,7 +12,8 @@ def test_main():
         print(f"Test skipped: {scoreset_filepath} does not exist.")
         return
     main(scoreset_filepath,summary_filepath,fig_filepath,
-         num_fits=2,core_limit=1,component_range=[2,3],scoreset_type="PillarProject",bootstrap=False)
+         num_fits=2,num_iterations=10,core_limit=1,
+         component_range=[2,3],scoreset_type="PillarProject",bootstrap=False)
     assert summary_filepath.exists(), "Summary file was not created."
     assert fig_filepath.exists(), "Figure file was not created."
     print("Test passed: Summary and figure files were created.")
