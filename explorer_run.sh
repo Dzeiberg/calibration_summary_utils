@@ -24,7 +24,7 @@ for ((i=0; i<TOTAL_JOBS; i+=MAX_CONCURRENT_JOBS)); do
 #SBATCH --output=slurm-%j.out
 #SBATCH --error=slurm-%j.err
 #SBATCH --time=47:00:00
-#SBATCH --partition=standard
+#SBATCH --partition=short
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=32G
