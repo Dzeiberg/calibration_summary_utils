@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH --job-name=calibration_summary
-#SBATCH --output=slurm-%j.out
-#SBATCH --error=slurm-%j.err
+#SBATCH --output=/projects/talisman/dzeiberg/logs/slurm-%j.out
+#SBATCH --error=/projects/talisman/dzeiberg/logs/slurm-%j.err
 #SBATCH --time=01:00:00
-#SBATCH --partition=standard
+#SBATCH --partition=short
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=8G
