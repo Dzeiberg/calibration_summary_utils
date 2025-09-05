@@ -11,7 +11,7 @@
 
 SCORESETS_DIR=/projects/talisman/dzeiberg/pillar_project_data/dataset_09042025/scoresets
 RESULTS_DIR=/projects/talisman/dzeiberg/calibration_results/$(date +%Y%m%d_%H%M%S)
-KWARGS_FILE=/home/d.zeiberg/calibration_summary_utils/kwargs.json
+KWARGS_FILE=/home/d.zeiberg/calibration_summary_utils/test_kwargs.json
 module load anaconda3/2024.06
 conda activate assay_calibration
 
