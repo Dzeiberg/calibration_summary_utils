@@ -23,6 +23,7 @@ def main(scoreset_filepath: Path, summary_filepath: Path, fig_filepath: Path, **
             - bootstrap (bool): Whether to use bootstrapping, evaluating on the out-of-bag samples,
                                 or to fit on the entire dataset and use the with with the maximum
                                 train likelihood. Default is True
+            - summarize (bool): Whether to run the summary and save results. Default is False.
     Raises:
         ValueError: If an unknown `scoreset_type` is provided.
     Side Effects:
@@ -38,7 +39,8 @@ def main(scoreset_filepath: Path, summary_filepath: Path, fig_filepath: Path, **
             core_limit=4,
             component_range=[2, 3],
             scoreset_type="BasicScoreset",
-            bootstrap=True
+            bootstrap=True,
+            summarize=True
         )
     """
     summary_filepath = Path(summary_filepath)
@@ -61,10 +63,11 @@ def main(scoreset_filepath: Path, summary_filepath: Path, fig_filepath: Path, **
         fit = Fit(scoreset)
         fit.run(core_limit=core_limit, num_fits=num_fits, component_range=component_range,bootstrap=bootstrap)
         fits.append(fit)
-    summarize_fits(fits,scoreset,summary_file_savepath=summary_filepath,
-                figure_savepath=fig_filepath,)
-    print(f"Summary saved to {summary_filepath}")
-    print(f"Figure saved to {fig_filepath}")
+    if kwargs.get("summarize", False):
+        summarize_fits(fits, scoreset, summary_file_savepath=summary_filepath,
+                       figure_savepath=fig_filepath)
+        print(f"Summary saved to {summary_filepath}")
+        print(f"Figure saved to {fig_filepath}")
 
 if __name__ == "__main__":
     import argparse
@@ -79,7 +82,7 @@ if __name__ == "__main__":
     parser.add_argument("--num_fits", type=int, default=10, help="Number of fits to perform. Default is 10.")
     parser.add_argument("--core_limit", type=int, default=1, help="Maximum number of cores to use. Default is 1.")
     parser.add_argument("--component_range", type=int, nargs='+', default=[2, 3], help="Range of components to consider. Default is [2, 3].")
-    
+    parser.add_argument("--summarize", action="store_true", help="Run the summary and save results.")
 
     args = parser.parse_args()
 
@@ -90,5 +93,6 @@ if __name__ == "__main__":
         num_fits=args.num_fits,
         core_limit=args.core_limit,
         component_range=args.component_range,
-        scoreset_type=args.scoreset_type
+        scoreset_type=args.scoreset_type,
+        summarize=args.summarize
     )

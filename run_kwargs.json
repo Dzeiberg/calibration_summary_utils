@@ -1,0 +1,8 @@
+{
+    "num_iterations": 1000,
+    "num_fits": 1000,
+    "core_limit": -1,
+    "component_range": [2,3],
+    "scoreset_type": "PillarProject",
+    "bootstrap": true
+}
