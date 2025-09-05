@@ -1,6 +1,7 @@
 from pathlib import Path
 from tqdm import tqdm
-from assay_calibration.data_utils.dataset import BasicScoreset,Scoreset
+from src.calibration_summary_utils.scoreset import Scoreset
+from assay_calibration.data_utils.dataset import BasicScoreset
 from assay_calibration.fit_utils.fit import Fit
 from src.calibration_summary_utils.summarize_fits import summarize_fits
 
@@ -64,7 +65,7 @@ def main(scoreset_filepath: Path, summary_filepath: Path, fig_filepath: Path, **
         fit.run(core_limit=core_limit, num_fits=num_fits, component_range=component_range,bootstrap=bootstrap)
         fits.append(fit)
     if kwargs.get("summarize", False):
-        summarize_fits(fits, scoreset, summary_file_savepath=summary_filepath,
+        summarize_fits(fits, scoreset, summary_file_savepath=summary_filepath, # type: ignore
                        figure_savepath=fig_filepath)
         print(f"Summary saved to {summary_filepath}")
         print(f"Figure saved to {fig_filepath}")
