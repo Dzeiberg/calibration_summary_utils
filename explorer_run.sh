@@ -2,7 +2,7 @@
 #SBATCH --job-name=calibration_summary
 #SBATCH --output=/projects/talisman/dzeiberg/logs/slurm-%j.out
 #SBATCH --error=/projects/talisman/dzeiberg/logs/slurm-%j.err
-#SBATCH --time=47:59:00
+#SBATCH --time=07:59:00
 #SBATCH --partition=short
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
