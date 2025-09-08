@@ -4,17 +4,20 @@ from src.calibration_summary_utils.scoreset import Scoreset
 from assay_calibration.data_utils.dataset import BasicScoreset
 from assay_calibration.fit_utils.fit import Fit
 from src.calibration_summary_utils.summarize_fits import summarize_fits
+from datetime import datetime
+import json
 
 
-def main(scoreset_filepath: Path, summary_filepath: Path, fig_filepath: Path, **kwargs):
+def main(scoreset_filepath: Path, fits_save_dir, **kwargs):
     """
     Main function to process a scoreset, perform fits, and generate a summary and figure.
     Args:
         scoreset_filepath (Path): Path to the input scoreset file. 
                                   The format depends on the `scoreset_type` parameter.
-        summary_filepath (Path): Path to save the summary file.
-        fig_filepath (Path): Path to save the generated figure.
+        
         **kwargs: Additional optional parameters:
+            - summary_filepath (Path): Path to save the summary file.
+            - fig_filepath (Path): Path to save the generated figure.
             - num_iterations (int): Number of iterations to perform. Default is 10.
             - num_fits (int): Number of fits to perform for each iteration. Default is 10.
             - core_limit (int): Maximum number of cores to use. Default is 1.
@@ -44,14 +47,12 @@ def main(scoreset_filepath: Path, summary_filepath: Path, fig_filepath: Path, **
             summarize=True
         )
     """
-    summary_filepath = Path(summary_filepath)
-    fig_filepath = Path(fig_filepath)
-    summary_filepath.parent.mkdir(parents=True, exist_ok=True)
-    fig_filepath.parent.mkdir(parents=True, exist_ok=True)
+    
     num_fits = kwargs.get("num_fits", 10)
     core_limit = kwargs.get("core_limit", 1)
     component_range = kwargs.get("component_range", [2, 3])
     scoreset_type = kwargs.get("scoreset_type", "BasicScoreset")
+    max_iter = kwargs.get("max_iter", 1000)
     if scoreset_type == "BasicScoreset":
         scoreset = BasicScoreset.from_csv(scoreset_filepath)
     elif scoreset_type == "PillarProject":
@@ -59,12 +60,29 @@ def main(scoreset_filepath: Path, summary_filepath: Path, fig_filepath: Path, **
     else:
         raise ValueError(f"Unknown scoreset type: {scoreset_type}; must be 'BasicScoreset' or 'PillarProject'")
     fits = []
+    start_time = datetime.now().strftime("%m%d%Y_%H%M%S")
     bootstrap = kwargs.get("bootstrap", True)
     for fitNum in tqdm(range(kwargs.get("num_iterations", 10)), desc="Fit iterations"):
         fit = Fit(scoreset)
-        fit.run(core_limit=core_limit, num_fits=num_fits, component_range=component_range,bootstrap=bootstrap)
+        fit.run(core_limit=core_limit, num_fits=num_fits, component_range=component_range,bootstrap=bootstrap, max_iter=max_iter)
         fits.append(fit)
+        fit_savepath = Path(fits_save_dir) / f"{scoreset_filepath.stem}_{start_time}_fit_{fitNum}.json"
+        fit_savepath.parent.mkdir(parents=True, exist_ok=True)
+        with open(fit_savepath, 'w') as f:
+            json.dump(fit.to_dict(), f, indent=4)
+
     if kwargs.get("summarize", False):
+        summary_filepath = kwargs.get("summary_filepath",None)
+        if summary_filepath is None:
+            raise ValueError("If summarize is True, summary_filepath must be provided in kwargs.")
+        summary_filepath = Path(summary_filepath)
+        
+        fig_filepath = kwargs.get("fig_filepath",None)
+        if fig_filepath is None:
+            raise ValueError("If summarize is True, fig_filepath must be provided in kwargs.")
+        fig_filepath = Path(fig_filepath)
+        summary_filepath.parent.mkdir(parents=True, exist_ok=True)
+        fig_filepath.parent.mkdir(parents=True, exist_ok=True)
         summarize_fits(fits, scoreset, summary_file_savepath=summary_filepath, # type: ignore
                        figure_savepath=fig_filepath)
         print(f"Summary saved to {summary_filepath}")
@@ -75,8 +93,9 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser(description="Process a scoreset and generate summary and figure.")
     parser.add_argument("scoreset_filepath", type=Path, help="Path to the input scoreset file.")
-    parser.add_argument("summary_filepath", type=Path, help="Path to save the summary file.")
-    parser.add_argument("fig_filepath", type=Path, help="Path to save the generated figure.")
+    parser.add_argument("fits_save_dir", type=Path, help="Directory to save fit results.")
+    parser.add_argument("--summary_filepath", type=Path, help="Path to save the summary file.")
+    parser.add_argument("--fig_filepath", type=Path, help="Path to save the generated figure.")
     parser.add_argument("--scoreset_type", type=str,
                         choices=["BasicScoreset", "PillarProject"],
                         default="BasicScoreset", help="Type of scoreset. Default is 'BasicScoreset'.")
@@ -89,6 +108,7 @@ if __name__ == "__main__":
 
     main(
         scoreset_filepath=args.scoreset_filepath,
+        fits_save_dir=args.fits_save_dir,
         summary_filepath=args.summary_filepath,
         fig_filepath=args.fig_filepath,
         num_fits=args.num_fits,

@@ -9,15 +9,22 @@
 #SBATCH --mem=32G
 #SBATCH --array=0-1000%4
 
-SCORESETS_DIR=/projects/talisman/dzeiberg/pillar_project_data/dataset_09042025/scoresets
-RESULTS_DIR=/projects/talisman/dzeiberg/calibration_results/$(date +%Y%m%d_%H%M%S)
-KWARGS_FILE=/home/d.zeiberg/calibration_summary_utils/run_kwargs.json
-module load anaconda3/2024.06
-conda init
-source /home/d.zeiberg/.bashrc
-conda activate assay_calibration
+cwd=$(dirname "$(realpath "$0")")
+KWARGS_FILE=$cwd/run_kwargs.json
+########### Explorer #####################
+# SCORESETS_DIR=/projects/talisman/dzeiberg/pillar_project_data/dataset_09042025/scoresets
+# RESULTS_DIR=/projects/talisman/dzeiberg/calibration_results/$(date +%Y%m%d_%H%M%S)
+# module load anaconda3/2024.06
+# conda init
+# source /home/d.zeiberg/.bashrc
+# conda activate assay_calibration
+############ Big Ticket ################
+SCORESETS_DIR=/data/dzeiberg/pillar_project/pillar_project_data/dataset_09042025/scoresets
+RESULTS_DIR=/data/dzeiberg/pillar_project/pillar_project_data/results/$(date +%Y%m%d_%H%M%S)
+mkdir -p $RESULTS_DIR
 
-python /home/d.zeiberg/calibration_summary_utils/run.py \
+
+uv run python $cwd/run.py \
     --scoresets_dir "$SCORESETS_DIR" \
     --results_dir "$RESULTS_DIR" \
     --kwargs_file "$KWARGS_FILE"
