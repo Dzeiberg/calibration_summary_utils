@@ -4,7 +4,7 @@ from src.calibration_summary_utils.scoreset import Scoreset
 from assay_calibration.data_utils.dataset import BasicScoreset
 from assay_calibration.fit_utils.fit import Fit
 from src.calibration_summary_utils.summarize_fits import summarize_fits
-from datetime import datetime
+from time import time
 import json
 
 
@@ -60,13 +60,13 @@ def main(scoreset_filepath: Path, fits_save_dir, **kwargs):
     else:
         raise ValueError(f"Unknown scoreset type: {scoreset_type}; must be 'BasicScoreset' or 'PillarProject'")
     fits = []
-    start_time = datetime.now().strftime("%m%d%Y_%H%M%S")
     bootstrap = kwargs.get("bootstrap", True)
     for fitNum in tqdm(range(kwargs.get("num_iterations", 10)), desc="Fit iterations"):
         fit = Fit(scoreset)
         fit.run(core_limit=core_limit, num_fits=num_fits, component_range=component_range,bootstrap=bootstrap, max_iter=max_iter)
         fits.append(fit)
-        fit_savepath = Path(fits_save_dir) / f"{scoreset_filepath.stem}_{start_time}_fit_{fitNum}.json"
+        currtime = str(time()).replace('.','_')
+        fit_savepath = Path(fits_save_dir) / f"{scoreset_filepath.stem}_{currtime}_fit_{fitNum}.json"
         fit_savepath.parent.mkdir(parents=True, exist_ok=True)
         with open(fit_savepath, 'w') as f:
             json.dump(fit.to_dict(), f, indent=4)
