@@ -41,7 +41,8 @@ class Scoreset:
         output_path = Path(output_path)
         if not output_path.parent.exists():
             output_path.parent.mkdir(parents=True, exist_ok=True)
-        self.dataframe.to_json(output_path, orient="records", lines=True)
+        with open(output_path, "w") as fout:
+            json.dump(self.dataframe.to_dict(orient="records"), fout, indent=4)
 
     @classmethod
     def from_dataframe(cls, dataframe: pd.DataFrame, **kwargs):
@@ -78,7 +79,7 @@ class Scoreset:
         json_path = Path(json_path)
         if not json_path.exists():
             raise FileNotFoundError(f"JSON file not found: {json_path}")
-        dataframe = pd.read_json(json_path, orient="records", lines=True)
+        dataframe = pd.read_json(json_path, orient="records")
         return cls(dataframe, **kwargs)
 
     def _init_dataframe(self, dataframe: pd.DataFrame, **kwargs):
