@@ -25,7 +25,7 @@ conda activate assay_calibration
 mkdir -p $RESULTS_DIR
 
 
-uv run python $cwd/run.py \
+python $cwd/run.py \
     --scoresets_dir "$SCORESETS_DIR" \
     --results_dir "$RESULTS_DIR" \
     --kwargs_file "$KWARGS_FILE"
