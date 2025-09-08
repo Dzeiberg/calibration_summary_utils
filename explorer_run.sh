@@ -18,9 +18,6 @@ module load anaconda3/2024.06
 conda init
 source /home/d.zeiberg/.bashrc
 conda activate assay_calibration
-############ Big Ticket ################
-# SCORESETS_DIR=/data/dzeiberg/pillar_project/pillar_project_data/dataset_09042025/scoresets
-# RESULTS_DIR=/data/dzeiberg/pillar_project/pillar_project_data/results/$(date +%Y%m%d_%H%M%S)
 ##########################################
 mkdir -p $RESULTS_DIR
 
