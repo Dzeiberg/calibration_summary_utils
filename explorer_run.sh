@@ -12,15 +12,16 @@
 cwd=$(dirname "$(realpath "$0")")
 KWARGS_FILE=$cwd/run_kwargs.json
 ########### Explorer #####################
-# SCORESETS_DIR=/projects/talisman/dzeiberg/pillar_project_data/dataset_09042025/scoresets
-# RESULTS_DIR=/projects/talisman/dzeiberg/calibration_results/$(date +%Y%m%d_%H%M%S)
-# module load anaconda3/2024.06
-# conda init
-# source /home/d.zeiberg/.bashrc
-# conda activate assay_calibration
+SCORESETS_DIR=/projects/talisman/dzeiberg/pillar_project_data/dataset_09042025/scoresets
+RESULTS_DIR=/projects/talisman/dzeiberg/calibration_results/$(date +%Y%m%d_%H%M%S)
+module load anaconda3/2024.06
+conda init
+source /home/d.zeiberg/.bashrc
+conda activate assay_calibration
 ############ Big Ticket ################
-SCORESETS_DIR=/data/dzeiberg/pillar_project/pillar_project_data/dataset_09042025/scoresets
-RESULTS_DIR=/data/dzeiberg/pillar_project/pillar_project_data/results/$(date +%Y%m%d_%H%M%S)
+# SCORESETS_DIR=/data/dzeiberg/pillar_project/pillar_project_data/dataset_09042025/scoresets
+# RESULTS_DIR=/data/dzeiberg/pillar_project/pillar_project_data/results/$(date +%Y%m%d_%H%M%S)
+##########################################
 mkdir -p $RESULTS_DIR
 
 
