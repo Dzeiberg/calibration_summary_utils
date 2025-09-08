@@ -9,7 +9,8 @@
 #SBATCH --mem=32G
 #SBATCH --array=0-1000%4
 
-cwd=$(dirname "$(realpath "$0")")
+# cwd=$(dirname "$(realpath "$0")")
+cwd='/home/d.zeiberg/calibration_summary_utils'
 KWARGS_FILE=$cwd/run_kwargs.json
 ########### Explorer #####################
 SCORESETS_DIR=/projects/talisman/dzeiberg/pillar_project_data/dataset_09042025/scoresets
