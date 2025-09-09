@@ -7,7 +7,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=32G
-#SBATCH --array=0-1000%4
+#SBATCH --array=0-1000
 
 # cwd=$(dirname "$(realpath "$0")")
 cwd='/home/d.zeiberg/calibration_summary_utils'
