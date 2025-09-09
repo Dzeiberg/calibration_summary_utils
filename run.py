@@ -8,6 +8,7 @@ def parse_args():
     parser.add_argument("--scoresets_dir", type=str, required=True, help="Path to the scoresets directory.")
     parser.add_argument("--results_dir", type=str, required=True, help="Path to the results directory.")
     parser.add_argument("--scoresets", type=str, nargs='+', required=False, help="List of scoresets to process.")
+    parser.add_argument("--job_index", type=int, required=False, help="Index of the first scoreset to process. If not provided, start at the beginning.")
     parser.add_argument("--kwargs_file", type=str, required=True, help="JSON string of additional arguments for processing.")
     parser.add_argument("--summarize", action="store_true", help="Run the summary and save results.")
     args = parser.parse_args()
@@ -33,6 +34,10 @@ def main_script(**kwargs):
     scoresets = args.scoresets
     if scoresets is None:
         scoresets = [file.stem for file in scoresets_dir.glob("*.json")]
+    scoresets = sorted(scoresets)
+    job_index = args.job_index
+    job_index = 0 if job_index is None else job_index % len(scoresets)
+    scoresets = scoresets[args.job_index:] + scoresets[:args.job_index]
     kwargs = json.loads(args.kwargs)
     if not scoresets_dir.exists():
         raise ValueError(f"Scoresets directory {scoresets_dir} does not exist; please download the Pillar Project data to this location.")

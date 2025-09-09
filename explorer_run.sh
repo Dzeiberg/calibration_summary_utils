@@ -26,4 +26,5 @@ mkdir -p $RESULTS_DIR
 python $cwd/run.py \
     --scoresets_dir "$SCORESETS_DIR" \
     --results_dir "$RESULTS_DIR" \
-    --kwargs_file "$KWARGS_FILE"
+    --kwargs_file "$KWARGS_FILE" \
+    --job_index $SLURM_ARRAY_TASK_ID
