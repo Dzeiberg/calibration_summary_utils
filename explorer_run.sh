@@ -9,7 +9,7 @@
 #SBATCH --mem=32G
 #SBATCH --array=0-999
 ARRAYOFFSET=${1:-0}
-RUNS_PER_JOB=70
+RUNS_PER_JOB=140
 cwd=$HOME/calibration_summary_utils
 KWARGS_FILE=$cwd/run_kwargs.json
 ########### Explorer #####################
