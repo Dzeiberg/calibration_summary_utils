@@ -67,61 +67,66 @@ def summarize_pillar_fits(
         raise FileNotFoundError(f"The directory {scoresets_dir} does not exist.")
     with open(final_models_filepath, "r") as file:
         models = json.load(file)
-    for scoreset_name, fit_dicts in tqdm(
+    with tqdm(
         models.items(), desc="Summarizing scoresets", total=len(models)
-    ):
-        if scoreset_name[-1] == "_":
-            scoreset_name = scoreset_name[:-1]
-        scoreset_summary_file = summaries_dir / f"{scoreset_name}_summary.json"
-        if scoreset_summary_file.exists():
-            print(f"Summary for {scoreset_name} already exists. Skipping...")
-            continue
-        subset = pillar_df[pillar_df.Dataset == scoreset_name].drop_duplicates(
-            subset=["ID"]
-        )
-        if subset.empty:
-            raise ValueError(
-                f"No data found for scoreset {scoreset_name} in the dataframe."
+    ) as pbar:
+        for scoreset_name, fit_dicts in pbar:
+            pbar.set_postfix({"Scoreset": scoreset_name})
+            if scoreset_name[-1] == "_":
+                scoreset_name = scoreset_name[:-1]
+            scoreset_summary_file = summaries_dir / f"{scoreset_name}_summary.json"
+            if scoreset_summary_file.exists():
+                print(f"Summary for {scoreset_name} already exists. Skipping...")
+                continue
+            subset = pillar_df[pillar_df.Dataset == scoreset_name].drop_duplicates(
+                subset=["ID"]
             )
-        # score_values = pd.to_numeric(subset['auth_reported_score'].values, errors='coerce')
-        scoreset_result = {
-            "scoreset_name": scoreset_name,
-            "calibration_method": "Multi-sample skew normal mixture model",
-        }
-        scoreset_path = scoresets_dir / f"{scoreset_name}.json"
-        if not scoreset_path.exists():
-            raise FileNotFoundError(f"The scoreset {scoreset_path} does not exist.")
-        scoreset = Scoreset.from_json(scoreset_path)
-        fits = [Fit.from_dict(scoreset, fit_data) for fit_data in fit_dicts]
-        priors = get_priors(scoreset, fits)
-        scoreset_result["priors"] = priors
-        median_prior = np.median(priors)
-        scoreset_result["median_prior"] = median_prior
-        inverted = is_inverted(scoreset)
-        pathogenic_threshold_sets, benign_threshold_sets = get_thresholds(
-            fits,
-            median_prior,
-            inverted,
-        )
-        scoreset_result[
-            "pathogenic_threshold_sets"
-        ] = pathogenic_threshold_sets.tolist()
-        scoreset_result["benign_threshold_sets"] = benign_threshold_sets.tolist()
-        scoreset_result["inverted"] = "inverted" if inverted else "canonical"
-        final_pathogenic_thresholds, final_benign_thresholds = summarize_thresholds(
-            pathogenic_threshold_sets,
-            benign_threshold_sets,
-            final_threshold_quantile,
-            bool(inverted),
-        )
-        scoreset_result[
-            "final_pathogenic_thresholds"
-        ] = final_pathogenic_thresholds.tolist()
-        scoreset_result["final_benign_thresholds"] = final_benign_thresholds.tolist()
-        scoreset_result["final_threshold_quantile"] = final_threshold_quantile
-        with open(scoreset_summary_file, "w") as f:
-            json.dump(scoreset_result, f, indent=4)
-        print(f"Summary written to {scoreset_summary_file}")
+            if subset.empty:
+                raise ValueError(
+                    f"No data found for scoreset {scoreset_name} in the dataframe."
+                )
+            # score_values = pd.to_numeric(subset['auth_reported_score'].values, errors='coerce')
+            scoreset_result = {
+                "scoreset_name": scoreset_name,
+                "calibration_method": "Multi-sample skew normal mixture model",
+                "n_models" : len(fit_dicts),
+            }
+            scoreset_path = scoresets_dir / f"{scoreset_name}.json"
+            if not scoreset_path.exists():
+                raise FileNotFoundError(f"The scoreset {scoreset_path} does not exist.")
+            print(f"Loading scoreset from {scoreset_path}")
+            scoreset = Scoreset.from_json(scoreset_path)
+            
+            fits = [Fit.from_dict(scoreset, fit_data) for fit_data in fit_dicts]
+            priors = get_priors(scoreset, fits)
+            scoreset_result["priors"] = priors
+            median_prior = np.median(priors)
+            scoreset_result["median_prior"] = median_prior
+            inverted = is_inverted(scoreset)
+            pathogenic_threshold_sets, benign_threshold_sets = get_thresholds(
+                fits,
+                median_prior,
+                inverted,
+            )
+            scoreset_result[
+                "pathogenic_threshold_sets"
+            ] = pathogenic_threshold_sets.tolist()
+            scoreset_result["benign_threshold_sets"] = benign_threshold_sets.tolist()
+            scoreset_result["inverted"] = "inverted" if inverted else "canonical"
+            final_pathogenic_thresholds, final_benign_thresholds = summarize_thresholds(
+                pathogenic_threshold_sets,
+                benign_threshold_sets,
+                final_threshold_quantile,
+                bool(inverted),
+            )
+            scoreset_result[
+                "final_pathogenic_thresholds"
+            ] = final_pathogenic_thresholds.tolist()
+            scoreset_result["final_benign_thresholds"] = final_benign_thresholds.tolist()
+            scoreset_result["final_threshold_quantile"] = final_threshold_quantile
+            with open(scoreset_summary_file, "w") as f:
+                json.dump(scoreset_result, f, indent=4)
+            print(f"Summary written to {scoreset_summary_file}")
     print(f"Final models saved to {final_models_filepath}")
     print(f"Summaries saved to {summaries_dir}")
     print(f"Visualizing fits and saving to {figures_dir}")
@@ -204,6 +209,7 @@ if __name__ == "__main__":
         description="Summarize fits from models and scoresets."
     )
     parser.add_argument("models_dir", type=Path, help="Path to the models JSON file.")
+
     parser.add_argument(
         "scoresets_dir", type=Path, help="Directory containing the scoresets."
     )

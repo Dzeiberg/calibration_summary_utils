@@ -2,14 +2,14 @@
 #SBATCH --job-name=calibration_summary
 #SBATCH --output=/projects/talisman/dzeiberg/logs/slurm-%j.out
 #SBATCH --error=/projects/talisman/dzeiberg/logs/slurm-%j.err
-#SBATCH --time=07:59:00
+#SBATCH --time=23:59:00
 #SBATCH --partition=short
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=32G
-#SBATCH --array=0-1000
+#SBATCH --array=0-5000
 
-# cwd=$(dirname "$(realpath "$0")")
+RUNS_PER_JOB=70
 cwd='/home/d.zeiberg/calibration_summary_utils'
 KWARGS_FILE=$cwd/run_kwargs.json
 ########### Explorer #####################

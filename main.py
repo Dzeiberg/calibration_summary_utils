@@ -62,14 +62,18 @@ def main(scoreset_filepath: Path, fits_save_dir, **kwargs):
     fits = []
     bootstrap = kwargs.get("bootstrap", True)
     for fitNum in tqdm(range(kwargs.get("num_iterations", 10)), desc="Fit iterations"):
+        start_time = time()
         fit = Fit(scoreset)
         fit.run(core_limit=core_limit, num_fits=num_fits, component_range=component_range,bootstrap=bootstrap, max_iter=max_iter)
-        fits.append(fit)
+        elapsed = time() - start_time
+        fit_dict = fit.to_dict()
+        fit_dict['fit_time_seconds'] = elapsed
+        fits.append(fit_dict)
         currtime = str(time()).replace('.','_')
         fit_savepath = Path(fits_save_dir) / f"{scoreset_filepath.stem}_{currtime}_fit_{fitNum}.json"
         fit_savepath.parent.mkdir(parents=True, exist_ok=True)
         with open(fit_savepath, 'w') as f:
-            json.dump(fit.to_dict(), f, indent=4)
+            json.dump(fits[-1], f, indent=4)
 
     if kwargs.get("summarize", False):
         summary_filepath = kwargs.get("summary_filepath",None)

@@ -43,10 +43,10 @@ def aggregate_and_select_final_models(
         raise FileNotFoundError(f"The directory {models_dir} does not exist.")
 
     all_models = {}
-    for model_file in tqdm(list(models_dir.glob("*.json")), desc="Aggregating models"):
+    for model_file in tqdm(list(models_dir.rglob("*.json")), desc="Aggregating models"):
         with open(model_file, "r") as file:
             model = json.load(file)
-        dataset_name = model_file.name.split("_20250")[0]
+        dataset_name = "_".join(model_file.stem.split("_")[:-4])
         if dataset_name not in all_models:
             all_models[dataset_name] = []
         all_models[dataset_name].append(model)
@@ -58,10 +58,12 @@ def aggregate_and_select_final_models(
     final_models = {}
     if num_models is not None:
         final_models = {k: random.sample(v, num_models) for k, v in all_models.items()}
+    print(f"Writing final models to {final_models_file}")
     with open(final_models_file, "w") as out_file:
         json.dump(
             final_models if num_models is not None else all_models, out_file, indent=4
         )
+    print(f"Final models written to {final_models_file}")
 
 
 if __name__ == "__main__":
