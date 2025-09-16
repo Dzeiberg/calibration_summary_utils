@@ -45,6 +45,7 @@ def main_script(**kwargs):
     results_dir = Path(args.results_dir).expanduser()
     results_dir.mkdir(exist_ok=True, parents=True)
     scoresets = get_scoresets_list(args.jobs_filepath, args.job_index, args.runs_per_job) 
+    print(f"Scoresets to process in this job: {scoresets}")
     kwargs = json.loads(args.kwargs)
     if not scoresets_dir.exists():
         raise ValueError(f"Scoresets directory {scoresets_dir} does not exist; please download the Pillar Project data to this location.")
