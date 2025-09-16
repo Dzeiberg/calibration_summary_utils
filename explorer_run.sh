@@ -7,8 +7,8 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=32G
-#SBATCH --array=0-5000
-
+#SBATCH --array=0-999
+ARRAYOFFSET=${1:-0}
 RUNS_PER_JOB=70
 cwd='/home/d.zeiberg/calibration_summary_utils'
 KWARGS_FILE=$cwd/run_kwargs.json
@@ -22,11 +22,10 @@ conda activate assay_calibration
 ##########################################
 mkdir -p $RESULTS_DIR
 
-
 python $cwd/run.py \
     --scoresets_dir "$SCORESETS_DIR" \
     --results_dir "$RESULTS_DIR" \
     --kwargs_file "$KWARGS_FILE" \
-    --job_index $SLURM_ARRAY_TASK_ID \
+    --job_index $(($SLURM_ARRAY_TASK_ID + $ARRAYOFFSET)) \
     --runs_per_job $RUNS_PER_JOB \
     --jobs_filepath "$cwd/runs_needed.tsv"
