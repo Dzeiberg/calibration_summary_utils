@@ -10,14 +10,14 @@
 #SBATCH --array=0-999
 ARRAYOFFSET=${1:-0}
 RUNS_PER_JOB=70
-cwd='/home/d.zeiberg/calibration_summary_utils'
+cwd=$HOME/calibration_summary_utils
 KWARGS_FILE=$cwd/run_kwargs.json
 ########### Explorer #####################
 SCORESETS_DIR=/projects/talisman/dzeiberg/pillar_project_data/dataset_09042025/scoresets
 RESULTS_DIR=/projects/talisman/dzeiberg/calibration_results/$(date +%Y%m%d_%H%M%S)
 module load anaconda3/2024.06
 conda init
-source /home/d.zeiberg/.bashrc
+source $HOME/.bashrc
 conda activate assay_calibration
 ##########################################
 mkdir -p $RESULTS_DIR

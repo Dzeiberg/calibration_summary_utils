@@ -32,7 +32,7 @@ TP53_Giacomelli_2018_p53null_etoposide	9920
 TP53_Giacomelli_2018_p53null_Nutlin3	9930
 TP53_Giacomelli_2018_p53WT_Nutlin3	9940
 TP53_Fayer_2021_meta	9960
-PTEN_Mighell_2018	9910
+PTEN_Mighell_2018	0
 PTEN_Matreyek_2018	9920
 F9_Popp_2025_light_chain	9930
 F9_Popp_2025_heavy_chain	9940
@@ -66,7 +66,7 @@ GCK_Gersing_2024_abundance	9938
 PAX6_McDonnell_2024_BLX_geneticin	9939
 MSH2_Jia_2021	9940
 RAD51C_Olvera-León_2024_z_score_D4_D14	9941
-KCNQ4_Zheng_2022_v12_homozygous	9950
+KCNQ4_Zheng_2022_v12_homozygous	0
 LARGE1_Ma_2024	9950
 SCN5A_Ma_2024_current_density	9961
 DDX3X_Radford_2023_cLFC_day15	9966
