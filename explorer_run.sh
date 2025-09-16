@@ -27,4 +27,6 @@ python $cwd/run.py \
     --scoresets_dir "$SCORESETS_DIR" \
     --results_dir "$RESULTS_DIR" \
     --kwargs_file "$KWARGS_FILE" \
-    --job_index $SLURM_ARRAY_TASK_ID
+    --job_index $SLURM_ARRAY_TASK_ID \
+    --runs_per_job $RUNS_PER_JOB \
+    --jobs_filepath "$cwd/runs_needed.tsv"
