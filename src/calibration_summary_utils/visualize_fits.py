@@ -4,7 +4,8 @@ from tqdm import tqdm
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from assay_calibration.data_utils.dataset import Scoreset, BasicScoreset
+from assay_calibration.data_utils.dataset import BasicScoreset
+from .scoreset import Scoreset
 from assay_calibration.fit_utils.fit import Fit
 from typing import Optional, List
 
