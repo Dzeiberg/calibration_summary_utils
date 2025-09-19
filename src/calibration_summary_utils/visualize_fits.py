@@ -4,8 +4,7 @@ from tqdm import tqdm
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from assay_calibration.data_utils.dataset import BasicScoreset
-from .scoreset import Scoreset
+from assay_calibration.data_utils.dataset import BasicScoreset, Scoreset
 from assay_calibration.fit_utils.fit import Fit
 from typing import Optional, List
 
@@ -90,8 +89,9 @@ def visualize_dataset(
                 ax[sample_idx].axvline(
                     thresholdB, color="blue", linestyle=linestyles[i]
                 )
-        if save_filepath is not None:
-            fig.savefig(save_filepath, bbox_inches="tight", dpi=300)
+    if save_filepath is not None:
+        fig.savefig(save_filepath, bbox_inches="tight", dpi=300)
+        plt.close(fig)
 
 
 def visualize_fits(
