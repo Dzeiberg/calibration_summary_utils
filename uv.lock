@@ -19,7 +19,7 @@ wheels = [
 [[package]]
 name = "assay-calibration"
 version = "0.1.0"
-source = { git = "https://github.com/Dzeiberg/assay_calibration.git?branch=main#7fc55932e8a138ef569e89d76bf935da201c31e8" }
+source = { git = "https://github.com/Dzeiberg/assay_calibration.git#12328fde169c9ba696a426aede5509455ee3b38d" }
 dependencies = [
     { name = "fire" },
     { name = "joblib" },
