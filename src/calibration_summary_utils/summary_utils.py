@@ -2,6 +2,7 @@ from tqdm import tqdm
 from assay_calibration.fit_utils.fit import Fit
 from typing import List, Tuple
 from joblib import Parallel, delayed
+import os
 import numpy as np
 
 
@@ -55,9 +56,9 @@ def get_thresholds(fits, medianPrior, inverted, point_values=[1, 2, 3, 4, 8], **
         return fit.get_score_thresholds(prior, point_values, inverted)
 
     print("Computing thresholds")
-    n_jobs = kwargs.get("n_jobs", -1)
+    n_jobs = kwargs.get("n_jobs", os.cpu_count())
     if n_jobs != 1:
-        results = Parallel(n_jobs=-1, verbose=10)(
+        results = Parallel(n_jobs=min(n_jobs, len(fits)), verbose=10)(
             delayed(compute_thresholds)(fit, medianPrior, point_values, inverted)
             for i, fit in enumerate(fits)
         )
