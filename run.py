@@ -23,15 +23,16 @@ def parse_args():
         args.kwargs = f.read()
     return args
 
-def get_scoresets_list(runs_filepath: Path, job_index: int, runs_per_job: int) -> list[str]:
+def get_scoresets_list(runs_filepath: Path, job_index: int, runs_per_job: int):
     runs_filepath = Path(runs_filepath).expanduser()
     if not runs_filepath.exists():
         raise ValueError(f"Runs needed TSV file {runs_filepath} does not exist.")
-    scoresets = []
+    # scoresets = []
     for idx in range(job_index * runs_per_job, job_index * runs_per_job + runs_per_job):
         scoreset_name = get_scoreset_name(runs_filepath, idx)
-        scoresets.append(scoreset_name)
-    return scoresets
+        yield scoreset_name
+    #     scoresets.append(scoreset_name)
+    # return scoresets
 
 def main_script(**kwargs):
     if len(kwargs):
@@ -44,13 +45,11 @@ def main_script(**kwargs):
     scoresets_dir = Path(args.scoresets_dir).expanduser()
     results_dir = Path(args.results_dir).expanduser()
     results_dir.mkdir(exist_ok=True, parents=True)
-    scoresets = get_scoresets_list(args.jobs_filepath, args.job_index, args.runs_per_job) 
-    print(f"Scoresets to process in this job: {scoresets}")
     kwargs = json.loads(args.kwargs)
     if not scoresets_dir.exists():
         raise ValueError(f"Scoresets directory {scoresets_dir} does not exist; please download the Pillar Project data to this location.")
 
-    for scoreset in scoresets:
+    for scoreset in get_scoresets_list(args.jobs_filepath, args.job_index, args.runs_per_job):
         print(f"Processing {scoreset}...")
         scoreset_filepath = scoresets_dir / f"{scoreset}.json"
         summary_filepath = results_dir / f"{scoreset}_summary.json"
