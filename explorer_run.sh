@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=calibration_summary
-#SBATCH --output=/projects/talisman/dzeiberg/logs/slurm-%j.out
-#SBATCH --error=/projects/talisman/dzeiberg/logs/slurm-%j.err
+#SBATCH --output=/projects/talisman/d.zeiberg/logs/slurm-%j.out
+#SBATCH --error=/projects/talisman/d.zeiberg/logs/slurm-%j.err
 #SBATCH --time=23:59:00
 #SBATCH --partition=short
 #SBATCH --ntasks=1
@@ -9,16 +9,16 @@
 #SBATCH --mem=32G
 #SBATCH --array=0-999
 ARRAYOFFSET=${1:-0}
-RUNS_PER_JOB=140
+RUNS_PER_JOB=50
 cwd=$HOME/calibration_summary_utils
 KWARGS_FILE=$cwd/run_kwargs.json
 ########### Explorer #####################
-SCORESETS_DIR=/projects/talisman/dzeiberg/pillar_project_data/dataset_09042025/scoresets
-RESULTS_DIR=/projects/talisman/dzeiberg/calibration_results/$(date +%Y%m%d_%H%M%S)
+SCORESETS_DIR=/projects/talisman/d.zeiberg/pillar_project/scoresets
+RESULTS_DIR=/projects/talisman/d.zeiberg/pillar_project/calibration_results/$(date +%Y%m%d_%H%M%S)
 module load anaconda3/2024.06
 conda init
 source $HOME/.bashrc
-conda activate assay_calibration
+conda activate pillar_project
 ##########################################
 mkdir -p $RESULTS_DIR
 
