@@ -64,7 +64,12 @@ def main(scoreset_filepath: Path, fits_save_dir, **kwargs):
     for fitNum in tqdm(range(kwargs.get("num_iterations", 10)), desc="Fit iterations"):
         start_time = time()
         fit = Fit(scoreset)
-        fit.run(core_limit=core_limit, num_fits=num_fits, component_range=component_range,bootstrap=bootstrap, max_iter=max_iter)
+        fit.run(core_limit=core_limit,
+                num_fits=num_fits,
+                component_range=component_range,
+                bootstrap=bootstrap,
+                max_iter=max_iter,
+                verbose=True)
         elapsed = time() - start_time
         fit_dict = fit.to_dict()
         fit_dict['fit_time_seconds'] = elapsed
